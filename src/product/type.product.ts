@@ -16,4 +16,5 @@ export type productType= {
     tags: string[];
     variants: variantType[];
     inventory: inventoryType;
-}
+  
+} 

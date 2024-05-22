@@ -3,7 +3,7 @@ import { productType } from "./type.product"
 
 // 1.create a product.
 const serviceCreateProduct=async(data:productType)=>{
-    const result=await productModel.create(data)
+    const result=await productModel.create({...data,isDeleted:false})
     return result
 }
 
@@ -25,9 +25,17 @@ const serviceUpdateAProduct=async(id:string,data:productType)=>{
     const result=await productModel.findOneAndUpdate({_id:id},data,{new:true})
     return result
 }
+
+// 5. delete a product by id.
+const serviceDeleteAProduct=async(id:string)=>{
+    const result=await productModel.deleteOne({_id:id})
+    return result
+}
+
 export const productService={
 createOne:serviceCreateProduct,
 getAll:serviceGetAllProducts,
 getOne:serviceGetAProduct,
-updateOne:serviceUpdateAProduct
+updateOne:serviceUpdateAProduct,
+deleteOne:serviceDeleteAProduct
 }

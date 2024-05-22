@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import productZodSchema from "./product.zod.schema";
 import { productService } from "./product.service";
+import { productSchema } from "./product.model";
 // 1. create a product.
 const controllCreateAProduct = async(req: Request, res: Response) => {
   try {
@@ -14,6 +15,8 @@ const controllCreateAProduct = async(req: Request, res: Response) => {
         message:"Product created successfully!",
         data:result
     })
+
+    
 
   } catch (err) {
     res.status(500).json({
@@ -94,9 +97,31 @@ const controllUpdateAProduct=async(req:Request,res:Response)=>{
     }
 }
 
+// 5. delete a product.
+const controllDeleteAProduct=async(req:Request,res:Response)=>{
+    try{
+        const {id}=req.params
+        const result=await productService.deleteOne(id)
+        res.status(200).json({
+            success:true,
+            message:"Product deleted successfully!",
+            data:null
+        })
+
+
+    } catch(err){
+        res.status(500).json({
+            success:false,
+            message:err
+           
+        })
+    }
+}
+
 export const productController = {
   createOne: controllCreateAProduct,
   getAll:controllGetAllProduct,
   getOne:controllGetAProduct,
-  updateOne:controllUpdateAProduct
+  updateOne:controllUpdateAProduct,
+  deleteOne:controllDeleteAProduct
 };

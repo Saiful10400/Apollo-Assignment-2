@@ -1,5 +1,6 @@
 import { Schema, model } from "mongoose";
 import { inventoryType, productType, variantType } from "./type.product";
+import { boolean } from "zod";
 
 // Define the Variant schema
 const variantSchema = new Schema<variantType>({
@@ -14,14 +15,16 @@ const inventorySchema = new Schema<inventoryType>({
 });
 
 // Define the Product schema
-const productSchema = new Schema<productType>({
+export const productSchema = new Schema<productType>({
     name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
     category: { type: String, required: true },
     tags: { type: [String], required: true },
     variants: { type: [variantSchema], required: true },
-    inventory: { type: inventorySchema, required: true }
+    inventory: { type: inventorySchema, required: true },
+
+    
 });
 
 
