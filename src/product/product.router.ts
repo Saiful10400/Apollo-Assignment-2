@@ -1,6 +1,5 @@
 import express from "express"
+import { productController } from "./product.controller"
 export const studentRouter=express.Router()
 
-studentRouter.get("/student",(req,res)=>{
-    res.send("student")
-})
+studentRouter.post("/",productController.createOne)

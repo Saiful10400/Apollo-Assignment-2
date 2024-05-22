@@ -3,7 +3,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "mongoose": "^8.4.0"
+    "mongoose": "^8.4.0",
+    "zod": "^3.23.8"
   },
   "name": "assignment-2",
   "version": "1.0.0",
@@ -14,7 +15,7 @@
     "typescript": "^5.4.5"
   },
   "scripts": {
-    "start":"ts-node-dev --respawn --transpile-only ./src/server.ts"
+    "start": "ts-node-dev --respawn --transpile-only ./src/server.ts"
   },
   "author": "",
   "license": "ISC",

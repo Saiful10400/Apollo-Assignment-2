@@ -3,9 +3,9 @@ import { studentRouter } from "./product/product.router"
 
 // declare app variable.
 const app=express()
+app.use(express.json())
 
-
-app.use("/data",studentRouter)
+app.use("/api/products",studentRouter)
 
 
 
