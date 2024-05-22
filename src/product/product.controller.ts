@@ -63,8 +63,40 @@ const controllGetAProduct=async(req:Request,res:Response)=>{
     }
 }
 
+// 4. update a product.
+const controllUpdateAProduct=async(req:Request,res:Response)=>{
+    try{
+        const {id}=req.params
+        const data=req.body
+         
+        const result=await productService.updateOne(id,data)
+        if(!result){
+            res.status(500).json({
+                success:false,
+                message:"incorrect query parameter"
+               
+            })
+            
+        }
+       else{
+        res.status(200).json({
+            success:true,
+            message:"Product updated successfully!",
+            data:result
+        })
+    }
+    }catch(err){
+        res.status(500).json({
+            success:false,
+            message:err
+           
+        })
+    }
+}
+
 export const productController = {
   createOne: controllCreateAProduct,
   getAll:controllGetAllProduct,
-  getOne:controllGetAProduct
+  getOne:controllGetAProduct,
+  updateOne:controllUpdateAProduct
 };
