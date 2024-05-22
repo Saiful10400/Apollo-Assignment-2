@@ -43,7 +43,28 @@ const controllGetAllProduct=async(req:Request,res:Response)=>{
     }
 }
 
+// 3. get a product.
+const controllGetAProduct=async(req:Request,res:Response)=>{
+    try{
+        const {id}=req.params
+       
+        const result=await productService.getOne(id as string)
+        res.status(200).json({
+            success:true,
+            message:"Product fetched successfully!",
+            data:result
+        })
+    }catch(err){
+        res.status(500).json({
+            success:false,
+            message:err
+           
+        })
+    }
+}
+
 export const productController = {
   createOne: controllCreateAProduct,
-  getAll:controllGetAllProduct
+  getAll:controllGetAllProduct,
+  getOne:controllGetAProduct
 };

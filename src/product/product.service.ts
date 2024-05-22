@@ -13,7 +13,15 @@ const serviceGetAllProducts=async()=>{
     return result
 }
 
+//3. get a product by id.
+const serviceGetAProduct=async(id:string)=>{
+   
+    const result=await productModel.findById(id)
+    return result
+}
+
 export const productService={
 createOne:serviceCreateProduct,
-getAll:serviceGetAllProducts
+getAll:serviceGetAllProducts,
+getOne:serviceGetAProduct
 }

@@ -7,3 +7,6 @@ studentRouter.post("/",productController.createOne)
 
 //2. get all products.
 studentRouter.get("/",productController.getAll)
+
+//3. get a product by id
+studentRouter.get("/:id",productController.getOne)
