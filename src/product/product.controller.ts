@@ -32,43 +32,25 @@ const controllCreateAProduct = async(req: Request, res: Response) => {
 // 2. get all product.
 const controllGetAllProduct=async(req:Request,res:Response)=>{
     try{
-        // query parametere.
-        const{searchTerm}=req.query
-        // getting data via condition.
-        const callService=async ():Promise<unknown> =>{
-            if(searchTerm){
-                const result=await productService.getOneWithKeyword(searchTerm as string)
-                return result
-            }else{
-                const result=await productService.getAll()
-                return result
-            }
-        }
         
-        const result=await callService()
-        if(searchTerm){
-            res.status(200).json({
-                success:true,
-                message:`Products matching search term '${searchTerm}' fetched successfully!`,
-                data:result
-            })
-        } else{
-            res.status(200).json({
-                success:true,
-                message:"Products fetched successfully!",
-                data:result
+        const result=await productService.getAll(req)
+        res.status(200).json({
+                    success:true,
+                    message:result.data.length>=1?result.message:`No data found.`,
+                    data:result.data.length>=1?result.data:null
+                })
+    }catch(err){
+        if(err instanceof Error){
+            res.status(500).json({
+                success:false,
+                message:err.message
+               
             })
         }
-    }catch(err){
-        res.status(500).json({
-            success:false,
-            message:err
-           
-        })
     }
 }
 
-// 3. get a product.
+// 3. get a product with id.
 const controllGetAProduct=async(req:Request,res:Response)=>{
     try{
         const {id}=req.params

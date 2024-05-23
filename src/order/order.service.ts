@@ -57,7 +57,7 @@ const serviceGetAllOrders=async (requst:Request)=>{
           return {message:"Orders fetched successfully!",result}
   
       } else{
-        throw new Error("Incorrect query paramitere.")
+        throw new Error("Incorrect query parameter.")
       }
   
 

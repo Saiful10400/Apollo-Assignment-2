@@ -1,5 +1,6 @@
 import { productModel } from "./product.model"
 import { productType } from "./type.product"
+import { Request } from "express"
 
 // 1.create a product.
 const serviceCreateProduct=async(data:productType)=>{
@@ -7,16 +8,44 @@ const serviceCreateProduct=async(data:productType)=>{
     return result
 }
 
-// 2. get all products.
-const serviceGetAllProducts=async()=>{
-    const result=await productModel.find()
-    return result
+// 2. get all products or products that match with keyword.
+const serviceGetAllProducts=async(request:Request)=>{
+
+    //checking is this comming with query paramitere.
+    const{searchTerm}=request.query
+    const queryObjLength=Object.keys(request.query).length
+
+
+    if(typeof(searchTerm)==="string"){
+        // coming with query paramitere.
+        const keyReg=new RegExp(searchTerm,"i")
+
+        const result=await productModel.find({$or:[
+            {name:{$regex:keyReg}},
+            {description:{$regex:keyReg}},
+            {tags:{$regex:keyReg}}
+        ]})
+        
+
+        return {message:`Products matching search term '${searchTerm}' fetched successfully!`
+    ,data:result}
+    }
+     else if(queryObjLength===0){
+        // not coming with query paramitre
+        const result=await productModel.find()
+        return {message:`Product fetched successfully!`
+        ,data:result}
+    } 
+    else{
+        throw new Error("Incorrect query parameter.")
+      }
+    
 }
 /// 2.1 get all products with matching keyword.
-const serviceGetAllProductsWithKeyword=async(keyword:string)=>{
-    const result=await productModel.find({tags:{$all:[new RegExp(keyword,"i")]}})
-    return result
-}
+// const serviceGetAllProductsWithKeyword=async(keyword:string)=>{
+//     const result=await productModel.find({tags:{$all:[new RegExp(keyword,"i")]}})
+//     return result
+// }
 
 // 3. get a product by id.
 const serviceGetAProduct=async(id:string)=>{
@@ -43,5 +72,4 @@ getAll:serviceGetAllProducts,
 getOne:serviceGetAProduct,
 updateOne:serviceUpdateAProduct,
 deleteOne:serviceDeleteAProduct,
-getOneWithKeyword:serviceGetAllProductsWithKeyword
 }
