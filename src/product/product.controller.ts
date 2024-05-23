@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import productZodSchema from "./product.zod.schema";
+import productZodSchema, { zodProductidValidator } from "./product.zod.schema";
 import { productService } from "./product.service";
 import { productSchema } from "./product.model";
 import { productType } from "./type.product";
@@ -58,8 +58,9 @@ const controllGetAllProduct=async(req:Request,res:Response)=>{
 const controllGetAProduct=async(req:Request,res:Response)=>{
     try{
         const {id}=req.params
+        const zodvalidatedId=zodProductidValidator.parse(id)
        
-        const result=await productService.getOne(id as string)
+        const result=await productService.getOne(zodvalidatedId as string)
         res.status(200).json({
             success:true,
             message:"Product fetched successfully!",
@@ -68,7 +69,7 @@ const controllGetAProduct=async(req:Request,res:Response)=>{
     }catch(err){
         res.status(500).json({
             success:false,
-            message:err
+            message:"Invalid order id"
            
         })
     }

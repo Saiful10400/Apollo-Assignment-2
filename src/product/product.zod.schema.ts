@@ -25,5 +25,6 @@ const productZodSchema = z.object({
         path: ["quantity"]
     })
 });
-
+//zod order id validatyion.
+export const zodProductidValidator= z.string({message:"Valid Product id is required."}).length(24, { message: "Product ID must be exactly 24 characters long." })
 export default productZodSchema;

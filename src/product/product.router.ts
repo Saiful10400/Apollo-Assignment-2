@@ -1,6 +1,8 @@
 import express from "express"
 import { productController } from "./product.controller"
+
 export const ProductRouter=express.Router()
+
 
 // 1. create one product.
 ProductRouter.post("/",productController.createOne)
