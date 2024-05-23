@@ -45,9 +45,9 @@ To install and run this project, follow these steps:
    Create a .env file in the root of your project and add **Port** and **DB_URL** as environment variable. For example:
 
    ```sh
-   PORT=<Port-number>
+   PORT= <Port-number>
 
-   MONGODB_URI="mongodb+srv://<Admin>:<password>@cluster0.qe6izo7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+   MONGODB_URL="mongodb+srv://<Admin>:<password>@cluster0.qe6izo7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
    
 
 ## Usage
