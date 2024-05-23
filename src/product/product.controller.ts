@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import productZodSchema from "./product.zod.schema";
 import { productService } from "./product.service";
 import { productSchema } from "./product.model";
+import { productType } from "./type.product";
 // 1. create a product.
 const controllCreateAProduct = async(req: Request, res: Response) => {
   try {
@@ -31,12 +32,33 @@ const controllCreateAProduct = async(req: Request, res: Response) => {
 // 2. get all product.
 const controllGetAllProduct=async(req:Request,res:Response)=>{
     try{
-        const result=await productService.getAll()
-        res.status(200).json({
-            success:true,
-            message:"Products fetched successfully!",
-            data:result
-        })
+        // query parametere.
+        const{searchTerm}=req.query
+        // getting data via condition.
+        const callService=async ():Promise<unknown> =>{
+            if(searchTerm){
+                const result=await productService.getOneWithKeyword(searchTerm as string)
+                return result
+            }else{
+                const result=await productService.getAll()
+                return result
+            }
+        }
+        
+        const result=await callService()
+        if(searchTerm){
+            res.status(200).json({
+                success:true,
+                message:`Products matching search term '${searchTerm}' fetched successfully!`,
+                data:result
+            })
+        } else{
+            res.status(200).json({
+                success:true,
+                message:"Products fetched successfully!",
+                data:result
+            })
+        }
     }catch(err){
         res.status(500).json({
             success:false,

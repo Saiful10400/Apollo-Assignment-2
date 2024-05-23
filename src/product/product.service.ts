@@ -12,6 +12,11 @@ const serviceGetAllProducts=async()=>{
     const result=await productModel.find()
     return result
 }
+/// 2.1 get all products with matching keyword.
+const serviceGetAllProductsWithKeyword=async(keyword:string)=>{
+    const result=await productModel.find({tags:{$all:[new RegExp(keyword,"i")]}})
+    return result
+}
 
 // 3. get a product by id.
 const serviceGetAProduct=async(id:string)=>{
@@ -37,5 +42,6 @@ createOne:serviceCreateProduct,
 getAll:serviceGetAllProducts,
 getOne:serviceGetAProduct,
 updateOne:serviceUpdateAProduct,
-deleteOne:serviceDeleteAProduct
+deleteOne:serviceDeleteAProduct,
+getOneWithKeyword:serviceGetAllProductsWithKeyword
 }
