@@ -25,26 +25,48 @@ const controllCreateAOrder=async (req:Request,res:Response)=>{
                     data:orderCreatedResult
                 })
             }else if(zodValidatedData.quantity===0){
-                throw new Error("You can't create a order with 0 quantity.")
+                res.status(500).json({
+                    success:false,
+                    message:"You can't create a order with 0 quantity."
+                })
+               return
             }
             else if(!inventory.inStock){
-                throw new Error("Product is out of stock.")
+                res.status(500).json({
+                    success:false,
+                    message:"Product is out of stock."
+                })
+               return
+                
             }
              else if(inventory.quantity<zodValidatedData.quantity){
-                //throw a error.
-                throw new Error("Insufficient quantity available in inventory.")
+                res.status(500).json({
+                    success:false,
+                    message:"Insufficient quantity available in inventory."
+                })
+               return
+                
             }
         }else{
-            throw new Error("invalid Product id.")
-        }
-    }catch(err){
-        if(err instanceof Error){
             res.status(500).json({
                 success:false,
-                message:err.message
+                message:"invalid Product id."
             })
+           return
+           
         }
-    }
+    }catch (err:any) {
+        const issue:Array<string> =[]
+       err?.issues?.map((item:any)=>issue.push(item.message))
+    
+        res.status(500).json({
+            success:false,
+            message:"your provided data has some issue.",
+            issue:issue as Array<string>
+           
+        })
+    
+      }
 }
 
 //2. get all order or get one order with query parametere.
@@ -52,17 +74,24 @@ const controllGetOrder=async  (req:Request,res:Response)=>{
     try{
         // call the service funciton.
         const result=await orderService.getOrder(req)
-        res.status(200).json({
-            success:true,
-            message:result.message,
-            data:result.result
-        })
+        if(result.success){
+            res.status(200).json({
+                ...result
+            })
+
+        } else{
+            res.status(500).json({
+                success:false,
+                message:"Order not found"
+            })
+        }
+        
 
     } catch(err){
         if(err instanceof Error){
             res.status(500).json({
                 success:false,
-                message:err.message
+                message:"invalid query parameter."
             })
         }
         

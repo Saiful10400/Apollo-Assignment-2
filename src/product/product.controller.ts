@@ -19,10 +19,14 @@ const controllCreateAProduct = async(req: Request, res: Response) => {
 
     
 
-  } catch (err) {
+  } catch (err:any) {
+    const issue:Array<string> =[]
+   err?.issues?.map((item:any)=>issue.push(item.message))
+
     res.status(500).json({
         success:false,
-        message:err
+        message:"your provided data has some issue.",
+        issue:issue as Array<string>
        
     })
 

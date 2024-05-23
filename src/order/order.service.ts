@@ -50,11 +50,19 @@ const serviceGetAllOrders=async (requst:Request)=>{
         const zodValidatedEmail=orderZodEmailSchema.parse(email)
           //this one is comming with query parametere.
           const result=await orderModel.find({email:zodValidatedEmail})
-          return {message:"Orders fetched successfully for user email!",result}
+         if(result.length>0){
+            return {success:true,message:"Orders fetched successfully for user email!",data:result}
+         } else{
+            return {success:false}
+         }
       } else if(queryObjLength===0){
           //not comming with query parametere.
           const result=await orderModel.find()
-          return {message:"Orders fetched successfully!",result}
+          if(result.length>0){
+            return {success:true,message:"Orders fetched successfully!",data:result}
+          } else{
+            return {success:false}
+          }
   
       } else{
         throw new Error("Incorrect query parameter.")
