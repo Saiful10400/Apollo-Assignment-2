@@ -3,7 +3,7 @@ import { productType } from "./type.product"
 
 // 1.create a product.
 const serviceCreateProduct=async(data:productType)=>{
-    const result=await productModel.create({...data,isDeleted:false})
+    const result=await productModel.create(data)
     return result
 }
 

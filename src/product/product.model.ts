@@ -28,5 +28,5 @@ export const productSchema = new Schema<productType>({
 });
 
 
-//export the product schema.
+//export the product model.
 export const productModel=model("product",productSchema)

@@ -1,11 +1,13 @@
 import express from "express"
-import { studentRouter } from "./product/product.router"
+import { ProductRouter } from "./product/product.router"
+import { orderRouter } from "./order/order.router"
 
 // declare app variable.
 const app=express()
 app.use(express.json())
 
-app.use("/api/products",studentRouter)
+app.use("/api/products",ProductRouter)
+app.use("/api/orders",orderRouter)
 
 
 

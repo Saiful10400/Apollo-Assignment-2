@@ -9,8 +9,8 @@ const controllCreateAProduct = async(req: Request, res: Response) => {
     const productData = req.body;
     
     // zod validate data.
-    const zodValidateData=productZodSchema.parse(productData)
-    const result=await productService.createOne(zodValidateData)
+    const zodValidatedData=productZodSchema.parse(productData)
+    const result=await productService.createOne(zodValidatedData)
     res.status(200).json({
         success:true,
         message:"Product created successfully!",
