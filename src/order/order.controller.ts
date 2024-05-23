@@ -24,7 +24,10 @@ const controllCreateAOrder=async (req:Request,res:Response)=>{
                     message:"Order created successfully!",
                     data:orderCreatedResult
                 })
-            }else if(!inventory.inStock){
+            }else if(zodValidatedData.quantity===0){
+                throw new Error("You can't create a order with 0 quantity.")
+            }
+            else if(!inventory.inStock){
                 throw new Error("Product is out of stock.")
             }
              else if(inventory.quantity<zodValidatedData.quantity){
@@ -44,10 +47,31 @@ const controllCreateAOrder=async (req:Request,res:Response)=>{
     }
 }
 
+//2. get all order or get one order with query parametere.
+const controllGetOrder=async  (req:Request,res:Response)=>{
+    try{
+        // call the service funciton.
+        const result=await orderService.getOrder(req)
+        res.status(200).json({
+            success:true,
+            message:result.message,
+            data:result.result
+        })
 
+    } catch(err){
+        if(err instanceof Error){
+            res.status(500).json({
+                success:false,
+                message:err.message
+            })
+        }
+        
+    }
+}
 
 
 
 export const orderController={
-    createOrder:controllCreateAOrder
+    createOrder:controllCreateAOrder,
+    getOrder:controllGetOrder
 }

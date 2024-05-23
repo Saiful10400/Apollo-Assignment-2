@@ -1,7 +1,9 @@
 
 import { productModel } from "../product/product.model"
 import { orderModel } from "./order.model"
+import { orderZodEmailSchema } from "./order.zod.schema"
 import { orderType } from "./type.order"
+import { Request } from "express"
 
 // # Inventory status checking and updating functions.
 
@@ -17,9 +19,6 @@ const serviceInventoryCheck=async(id:string):Promise<{quantity:number,inStock:bo
 
 //#2. update the inventory.
 const serviceInventoryUpdate=async(id:string,quantity:number)=>{
-    // //check invetntory quantity, so that we can update instock status.
-    // //stpe1. check quantity.
-    // const preInventoryStatus= await serviceInventoryCheck(id)
     
     const willUPdate=quantity===0?{$set:{"inventory.quantity":quantity,"inventory.inStock":false}}:{$set:{"inventory.quantity":quantity}}
     const result=await productModel.findOneAndUpdate({_id:id},willUPdate,{new:true})
@@ -35,6 +34,37 @@ const serviceCreateAOrder=async (data:orderType)=>{
     return result
 }
 
+//##2. get all orders or a single order with query parameter.
+const serviceGetAllOrders=async (requst:Request)=>{
+
+
+      // checking is this request commitn with query parametere.
+
+      const{email}=requst.query
+      const queryObjLength=Object.keys(requst.query).length
+     
+     
+
+      if(email){
+        //validateinn email.
+        const zodValidatedEmail=orderZodEmailSchema.parse(email)
+          //this one is comming with query parametere.
+          const result=await orderModel.find({email:zodValidatedEmail})
+          return {message:"Orders fetched successfully for user email!",result}
+      } else if(queryObjLength===0){
+          //not comming with query parametere.
+          const result=await orderModel.find()
+          return {message:"Orders fetched successfully!",result}
+  
+      } else{
+        throw new Error("Incorrect query paramitere.")
+      }
+  
+
+
+    
+}
+
 
 
 
@@ -43,4 +73,5 @@ export const orderService={
     inventoryStatus:serviceInventoryCheck,
     updateQuantity:serviceInventoryUpdate,
     createOrder:serviceCreateAOrder,
+    getOrder:serviceGetAllOrders
 }
