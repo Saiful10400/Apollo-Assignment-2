@@ -1,15 +1,18 @@
 import express from "express"
-import { ProductRouter } from "./product/product.router"
-import { orderRouter } from "./order/order.router"
 import { Request,Response } from "express"
+import routes from "./routes"
+import cookieParser from "cookie-parser"
+import cors from "cors"
+import globalErrorHandler from "./MiddleWare/globalErrorHandler"
 
 // declare app variable.
 const app=express()
 app.use(express.json())
+app.use(cookieParser())
+app.use(cors({ origin: ['http://localhost:5173'], credentials: true }));
+app.use("/api/v1",routes)
 
-app.use("/api/products",ProductRouter)
-app.use("/api/orders",orderRouter)
-
+app.use(globalErrorHandler)
 // handle invalid route.
 app.use((req:Request,res:Response)=>{
 res.status(404).json({
